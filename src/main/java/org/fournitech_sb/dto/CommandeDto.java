@@ -15,14 +15,12 @@ import java.util.List;
 public class CommandeDto {
     Long id;
 
-    @NotNull
     LocalDate dateCommande;
 
     @NotNull
     Long fournisseurId;
     List<ProduitCommandeDto> produitCommandes;
 
-    @NotNull
     @Min(0)
     @Positive
     Double prix;
