@@ -11,5 +11,6 @@ https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <include file="db.changelog/create_table_commande.sql"/>
     <include file="db.changelog/create_table_produit_commande.sql"/>
     <include file="db.changelog/create_table_mouvement_stock.sql"/>
+    <include file="db.changelog/add_cump_column_table_produit.sql"/>
 
 </databaseChangeLog>

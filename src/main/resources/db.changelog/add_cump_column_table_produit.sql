@@ -1,0 +1,1 @@
+ALTER TABLE produits ADD COLUMN cump DECIMAL(10, 2);
