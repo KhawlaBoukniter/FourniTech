@@ -13,4 +13,5 @@ public interface CommandeServiceInterface {
     CommandeDto updateCommande(Long id, CommandeDto commandeDTO);
     void deleteCommande(Long id);
     CommandeDto annulerCommande(Long id);
+    CommandeDto validerCommande(Long id);
 }
