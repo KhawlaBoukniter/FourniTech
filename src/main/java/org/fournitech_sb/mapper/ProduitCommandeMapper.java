@@ -14,7 +14,6 @@ public interface ProduitCommandeMapper {
 
     @Mapping(target = "produit", source = "produitId", qualifiedByName = "produitFromId")
     @Mapping(target = "commande", ignore = true)
-    @Mapping(target = "prixUnit", ignore = true)
     ProduitCommande toEntity(ProduitCommandeDto produitCommandeDto);
 
     @Named("produitFromId")
