@@ -65,4 +65,11 @@ public class CommandeController {
         CommandeDto annulee = commandeService.annulerCommande(id);
         return ResponseEntity.ok(annulee);
     }
+
+    @PatchMapping("/valider/{id}")
+    @Operation(summary = "Valider une commande", description = "Valide une commande existante")
+    public ResponseEntity<CommandeDto> validerCommande(@PathVariable Long id) {
+        CommandeDto validee = commandeService.validerCommande(id);
+        return ResponseEntity.ok(validee);
+    }
 }
