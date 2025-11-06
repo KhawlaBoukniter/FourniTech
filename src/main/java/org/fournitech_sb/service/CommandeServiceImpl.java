@@ -2,6 +2,7 @@ package org.fournitech_sb.service;
 
 import lombok.RequiredArgsConstructor;
 import org.fournitech_sb.dto.CommandeDto;
+import org.fournitech_sb.dto.ProduitCommandeDto;
 import org.fournitech_sb.exception.ResourceNotFoundException;
 import org.fournitech_sb.mapper.CommandeMapper;
 import org.fournitech_sb.model.*;
@@ -49,7 +50,10 @@ public class CommandeServiceImpl implements CommandeServiceInterface {
             Produit produit = produitRepository.findById(pc.getProduit().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Produit non trouvé : " + pc.getProduit().getId()));
 
-            pc.setPrixUnit(produit.getPrixUnit());
+            if (pc.getPrixUnit() == null) {
+                throw new IllegalArgumentException("Le prix de vente doit être renseigné pour le produit " + produit.getNom());
+            }
+
             pc.setCommande(commande);
             total += pc.getPrixUnit() * pc.getQuantite();
         }
@@ -89,14 +93,21 @@ public class CommandeServiceImpl implements CommandeServiceInterface {
         if (dto.getProduitCommandes() != null) {
             existing.getProduitCommandes().clear();
 
-            Commande temp = commandeMapper.toEntity(dto);
             Double total = 0.0;
 
-            for (ProduitCommande pc : temp.getProduitCommandes()) {
-                Produit produit = produitRepository.findById(pc.getProduit().getId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Produit non trouvé : " + pc.getProduit().getId()));
+            for (ProduitCommandeDto pcDto : dto.getProduitCommandes()) {
+                Produit produit = produitRepository.findById(pcDto.getProduitId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Produit non trouvé : " + pcDto.getProduitId()));
 
-                pc.setPrixUnit(produit.getPrixUnit());
+                ProduitCommande pc = new ProduitCommande();
+                pc.setProduit(produit);
+                pc.setQuantite(pcDto.getQuantite());
+
+                if (pcDto.getPrixUnit() == null) {
+                    throw new IllegalArgumentException("Le prix de vente doit être renseigné pour le produit " + produit.getNom());
+                }
+                pc.setPrixUnit(pcDto.getPrixUnit());
+
                 pc.setCommande(existing);
                 existing.getProduitCommandes().add(pc);
                 total += pc.getPrixUnit() * pc.getQuantite();
@@ -120,8 +131,6 @@ public class CommandeServiceImpl implements CommandeServiceInterface {
                             TypeMouvement.SORTIE,
                             existing.getId()
                             );
-
-                    produitRepository.save(produit);
                 }
             }
         }
@@ -153,6 +162,39 @@ public class CommandeServiceImpl implements CommandeServiceInterface {
         }
 
         commande.setStatutCommande(StatutCommande.ANNULEE);
+        Commande updated = commandeRepository.save(commande);
+        return commandeMapper.toDto(updated);
+    }
+
+    @Override
+    public CommandeDto validerCommande(Long id) {
+        Commande commande = commandeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Commande non trouvée avec ID : " + id));
+
+        if (commande.getStatutCommande() == StatutCommande.LIVREE) {
+            throw new IllegalStateException("cette commande est déjà livrée.");
+        }
+
+        if (commande.getStatutCommande() == StatutCommande.ANNULEE) {
+            throw new IllegalStateException("cette commande est déjà anuulée.");
+        }
+
+        for (ProduitCommande pc : commande.getProduitCommandes()) {
+            Produit produit = produitRepository.findById(pc.getProduit().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Produit non trouvé : " + pc.getProduit().getId()));
+
+            mouvementStockService.createMouvement(
+                    produit,
+                    pc.getQuantite(),
+                    pc.getPrixUnit(),
+                    TypeMouvement.SORTIE,
+                    commande.getId()
+            );
+        }
+
+        commande.setStatutCommande(StatutCommande.LIVREE);
+
+
         Commande updated = commandeRepository.save(commande);
         return commandeMapper.toDto(updated);
     }
