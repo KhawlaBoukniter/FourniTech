@@ -67,28 +67,26 @@ public class MouvementStockServiceImpl implements MouvementStockServiceInterface
         mouvement.setTypeMouvement(typeMouvement);
         mouvement.setDateMouvement(LocalDate.now());
 
-        Commande commande = null;
-
         if (commandeId != null) {
-            commande = commandeRepository.findById(commandeId).orElseThrow(() -> new ResourceNotFoundException("commande not found"));
+            Commande commande = commandeRepository.findById(commandeId).orElseThrow(() -> new ResourceNotFoundException("commande not found"));
+            mouvement.setCommande(commande);
         }
 
-        mouvement.setCommande(commande);
-
-        produit.setStockActuel(produit.getStockActuel() + quantite);
-
         if (typeMouvement.equals(TypeMouvement.ENTREE)) {
-            produit.setStockActuel(produit.getStockActuel() + quantite);
-            Double nouveauCump = calculerPrixUnitaireCUMP(produit, quantite, prixAchat);
-            produit.setPrixUnit(nouveauCump);
+            if (prixAchat != null) {
+                Double nouveauCump = calculerPrixUnitaireCUMP(produit, quantite, prixAchat);
+                produit.setCump(nouveauCump);
+            }
+            produit.setStockActuel((produit.getStockActuel() != null ? produit.getStockActuel() : 0));
+
         } else if (typeMouvement.equals(TypeMouvement.SORTIE)) {
+            if (produit.getStockActuel() == null || produit.getStockActuel() < quantite) {
+                throw new IllegalStateException("Stock insuffisant pour la sortie : stock actuel = " + produit.getStockActuel() + ", demandé = " + quantite);
+            }
             produit.setStockActuel(produit.getStockActuel() - quantite);
 
-            if (produit.getStockActuel() <= 0) {
-                throw new IllegalStateException("stock actuel insuffisant");
-            }
         } else if (typeMouvement.equals(TypeMouvement.AJUSTEMENT)) {
-            produit.setStockActuel(produit.getStockActuel() + quantite);
+            produit.setStockActuel(produit.getStockActuel());
         }
 
         produitRepository.save(produit);
@@ -133,14 +131,14 @@ public class MouvementStockServiceImpl implements MouvementStockServiceInterface
 
     @Override
     public Double calculerPrixUnitaireCUMP(Produit produit, Integer quantiteEntree, Double prixEntree) {
-        Integer stockActuel = produit.getStockActuel();
-        Double prixActuel = produit.getPrixUnit() != null ? produit.getPrixUnit() : 0.0;
+        Integer stockActuel = produit.getStockActuel() != null ? produit.getStockActuel() : 0;
+        Double cumpActuel = produit.getCump() != null ? produit.getCump() : 0.0;
 
         if (stockActuel == 0) {
             return prixEntree;
         }
 
-        return (prixActuel * stockActuel + prixEntree * quantiteEntree) / (stockActuel + quantiteEntree);
+        return (cumpActuel * stockActuel + prixEntree * quantiteEntree) / (stockActuel + quantiteEntree);
     }
 }
 
