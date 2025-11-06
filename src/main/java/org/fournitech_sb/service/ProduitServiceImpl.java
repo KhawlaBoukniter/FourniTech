@@ -66,9 +66,24 @@ public class ProduitServiceImpl implements ProduitServiceInterface {
         existingProduit.setDescription(produitDto.getDescription());
         existingProduit.setPrixUnit(produitDto.getPrixUnit());
         existingProduit.setCategorie(produitDto.getCategorie());
-        existingProduit.setStockActuel(produitDto.getStockActuel());
+
+        Integer ancienStock = existingProduit.getStockActuel();
+        Integer stockActuel = produitDto.getStockActuel() !=  null ? produitDto.getStockActuel() : ancienStock;
+        Integer diff =  stockActuel - ancienStock;
+
+        existingProduit.setStockActuel(stockActuel);
 
         Produit updated = produitRepository.save(existingProduit);
+
+        if (diff != 0) {
+            mouvementStockService.createMouvement(
+                    updated,
+                    diff,
+                    produitDto.getPrixUnit(),
+                    TypeMouvement.AJUSTEMENT,
+                    null
+            );
+        }
         return produitMapper.toDto(updated);
     }
 
