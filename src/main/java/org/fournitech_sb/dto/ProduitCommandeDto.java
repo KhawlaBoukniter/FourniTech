@@ -15,5 +15,7 @@ public class ProduitCommandeDto {
     @Positive
     Integer quantite;
 
+    @NotNull
+    @Min(0)
     Double prixUnit;
 }
