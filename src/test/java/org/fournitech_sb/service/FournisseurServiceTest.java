@@ -43,4 +43,15 @@ public class FournisseurServiceTest {
         verify(fournisseurRepository).findAll(any(Pageable.class));
     }
 
+    @Test
+    public void getByIdTest() {
+        Fournisseur fournisseur = new Fournisseur();
+        fournisseur.setId(1L);
+        fournisseur.setNom("Test");
+        when(fournisseurRepository.findById(1L)).thenReturn(Optional.of(fournisseur));
+
+        Fournisseur rslt = fournisseurService.findFournisseurById(1L);
+        assertEquals("Test", rslt.getNom());
+        verify(fournisseurRepository).findById(1L);
+    }
 }
