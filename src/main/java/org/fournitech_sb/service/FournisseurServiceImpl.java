@@ -1,6 +1,5 @@
 package org.fournitech_sb.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.fournitech_sb.exception.ResourceNotFoundException;
 import org.fournitech_sb.model.Fournisseur;
 import org.fournitech_sb.repository.FournisseurRepositoryInterface;
