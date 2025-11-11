@@ -8,9 +8,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface FournisseurServiceInterface {
-    void addFournisseur(Fournisseur f);
+    Fournisseur addFournisseur(Fournisseur f);
     void deleteFournisseur(Fournisseur f);
-    void updateFournisseur(Fournisseur f);
+    Fournisseur updateFournisseur(Fournisseur f);
     Fournisseur findFournisseurById(Long id);
     Page<Fournisseur> findAllFournisseur(Integer page, Integer size, String sortBy, Boolean ascending);
     Page<Fournisseur> findFournisseurByNom(String nom, Integer page, Integer size, String sortBy, Boolean ascending);

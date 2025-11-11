@@ -22,16 +22,16 @@ public class FournisseurServiceImpl implements FournisseurServiceInterface {
         this.fournisseurRepository = fournisseurRepository;
     }
 
-    public void addFournisseur(Fournisseur f) {
-        fournisseurRepository.save(f);
+    public Fournisseur addFournisseur(Fournisseur f) {
+        return fournisseurRepository.save(f);
     }
 
     public void deleteFournisseur(Fournisseur f) {
         fournisseurRepository.delete(f);
     }
 
-    public void updateFournisseur(Fournisseur f) {
-        fournisseurRepository.save(f);
+    public Fournisseur updateFournisseur(Fournisseur f) {
+        return fournisseurRepository.save(f);
     }
 
     public Fournisseur findFournisseurById(Long id) {
