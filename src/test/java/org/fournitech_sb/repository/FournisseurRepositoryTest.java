@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -35,4 +37,20 @@ public class FournisseurRepositoryTest {
         assertEquals(found.get().getNom(), saved.getNom());
 
     }
+
+    @Test
+    void findAllTest() {
+        Fournisseur fournisseur1 = new Fournisseur();
+        fournisseur1.setNom("Test1");
+
+        Fournisseur fournisseur2 = new Fournisseur();
+        fournisseur2.setNom("Test2");
+
+        fournisseurRepository.save(fournisseur1);
+        fournisseurRepository.save(fournisseur2);
+
+        List<Fournisseur> fournisseurs = fournisseurRepository.findAll();
+        assertThat(fournisseurs).hasSizeGreaterThanOrEqualTo(2);
+    }
+    
 }
