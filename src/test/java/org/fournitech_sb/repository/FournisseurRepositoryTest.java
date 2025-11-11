@@ -24,4 +24,15 @@ public class FournisseurRepositoryTest {
         assertNotNull(saved.getId());
     }
 
+    @Test
+    public void findByIdTest() {
+        Fournisseur fournisseur = new Fournisseur();
+        fournisseur.setNom("Test");
+
+        Fournisseur saved =  fournisseurRepository.save(fournisseur);
+        Optional<Fournisseur> found = fournisseurRepository.findById(fournisseur.getId());
+        assertTrue(found.isPresent());
+        assertEquals(found.get().getNom(), saved.getNom());
+
+    }
 }
