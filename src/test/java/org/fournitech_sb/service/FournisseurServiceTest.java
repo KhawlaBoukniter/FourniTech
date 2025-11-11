@@ -29,6 +29,21 @@ public class FournisseurServiceTest {
     FournisseurServiceImpl fournisseurService;
 
     @Test
+    public void addFournisseurTest() {
+        Fournisseur fournisseur = new Fournisseur();
+        fournisseur.setId(1L);
+        fournisseur.setNom("Test");
+
+        when(fournisseurRepository.save(fournisseur)).thenReturn(fournisseur);
+
+        Fournisseur rslt = fournisseurService.addFournisseur(fournisseur);
+
+        assertNotNull(rslt);
+        assertEquals(fournisseur.getNom(), rslt.getNom());
+        verify(fournisseurRepository).save(fournisseur);
+    }
+
+    @Test
     public void findAllTest() {
         Fournisseur fournisseur = new Fournisseur();
         fournisseur.setId(1L);
