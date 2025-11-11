@@ -16,8 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FournisseurServiceTest {
@@ -85,5 +84,16 @@ public class FournisseurServiceTest {
         Fournisseur rslt = fournisseurService.findFournisseurById(1L);
         assertEquals("Test", rslt.getNom());
         verify(fournisseurRepository).findById(1L);
+    }
+
+    @Test
+    public void deleteFournusseurTest() {
+        Fournisseur fournisseur = new Fournisseur();
+        fournisseur.setId(1L);
+
+        doNothing().when(fournisseurRepository).delete(fournisseur);
+        fournisseurService.deleteFournisseur(fournisseur);
+
+        verify(fournisseurRepository).delete(fournisseur);
     }
 }
