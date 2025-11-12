@@ -9,11 +9,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -87,6 +93,28 @@ public class ProduitServiceTest {
         verify(produitRepository).save(existingProduit);
         verify(produitMapper).toDto(updatedProduit);
     }
+
+    @Test
+    public void findAllTest() {
+        Produit produit = new Produit();
+        produit.setId(1L);
+
+        ProduitDto produitDto = new ProduitDto();
+        produitDto.setId(1L);
+
+        Page<Produit> pageMock = new PageImpl<>(List.of(produit));
+        when(produitRepository.findAll(any(Pageable.class))).thenReturn(pageMock);
+        when(produitMapper.toDto(produit)).thenReturn(produitDto);
+
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Page<ProduitDto> produits = produitService.getAllProduits(pageable);
+
+        assertEquals(1, produits.getContent().size());
+        assertEquals(1L, produits.getContent().get(0).getId());
+        verify(produitRepository).findAll(any(Pageable.class));
+    }
+
 
 
 }
