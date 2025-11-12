@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.Mockito.verify;
@@ -22,6 +24,9 @@ public class ProduitServiceTest {
     ProduitRepositoryInterface produitRepository;
     @Mock
     ProduitMapper produitMapper;
+
+    @Mock
+    MouvementStockServiceImpl mouvementStockService;
 
     @InjectMocks
     ProduitServiceImpl produitService;
@@ -47,6 +52,41 @@ public class ProduitServiceTest {
         verify(produitRepository).save(produit);
     }
 
-    
+    @Test
+    public void updateProduitTest() {
+        Long produitId = 1L;
+
+        Produit existingProduit = new Produit();
+        existingProduit.setId(produitId);
+        existingProduit.setNom("Test");
+        existingProduit.setStockActuel(10);
+        existingProduit.setPrixUnit(100.0);
+
+        ProduitDto updatedDto = new ProduitDto();
+        updatedDto.setId(produitId);
+        updatedDto.setNom("updatedTest");
+        updatedDto.setStockActuel(15);
+        updatedDto.setPrixUnit(100.0);
+
+        Produit updatedProduit = new Produit();
+        updatedProduit.setId(produitId);
+        updatedProduit.setNom("updatedTest");
+        updatedProduit.setStockActuel(15);
+        updatedProduit.setPrixUnit(100.0);
+
+        when(produitRepository.findById(produitId)).thenReturn(Optional.of(existingProduit));
+        when(produitRepository.save(existingProduit)).thenReturn(updatedProduit);
+        when(produitMapper.toDto(updatedProduit)).thenReturn(updatedDto);
+
+        ProduitDto result = produitService.updateProduit(produitId, updatedDto);
+
+        assertNotNull(result);
+        assertEquals("updatedTest", result.getNom());
+        assertEquals(15, result.getStockActuel());
+        verify(produitRepository).findById(produitId);
+        verify(produitRepository).save(existingProduit);
+        verify(produitMapper).toDto(updatedProduit);
+    }
+
 
 }
