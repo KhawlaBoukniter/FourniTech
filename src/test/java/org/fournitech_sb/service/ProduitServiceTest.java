@@ -115,6 +115,28 @@ public class ProduitServiceTest {
         verify(produitRepository).findAll(any(Pageable.class));
     }
 
+    @Test
+    public void findByIdTest() {
+        Long produitId = 1L;
+        Produit produit = new Produit();
+        produit.setId(produitId);
+        produit.setNom("Test");
+
+        ProduitDto produitDto = new ProduitDto();
+        produitDto.setId(produitId);
+        produitDto.setNom("Test");
+
+        when(produitRepository.findById(produitId)).thenReturn(Optional.of(produit));
+        when(produitMapper.toDto(produit)).thenReturn(produitDto);
+
+        ProduitDto result = produitService.getProduitById(produitId);
+
+        assertNotNull(result);
+        assertEquals(produitId, result.getId());
+        assertEquals("Test", result.getNom());
+        verify(produitRepository).findById(produitId);
+    }
+
 
 
 }
