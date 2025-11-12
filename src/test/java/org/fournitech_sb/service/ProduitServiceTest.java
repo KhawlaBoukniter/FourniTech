@@ -137,6 +137,19 @@ public class ProduitServiceTest {
         verify(produitRepository).findById(produitId);
     }
 
+    @Test
+    public void deleteProduitTest() {
+        Long produitId = 1L;
+        Produit produit = new Produit();
+        produit.setId(produitId);
+
+        when(produitRepository.findById(produitId)).thenReturn(Optional.of(produit));
+
+        produitService.deleteProduit(produitId);
+
+        verify(produitRepository).findById(produitId);
+        verify(produitRepository).delete(produit);
+    }
 
 
 }
