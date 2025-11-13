@@ -99,5 +99,28 @@ public class CommandeIntegrationTest {
         assertThat(response.getBody().getStatutCommande()).isEqualTo(StatutCommande.EN_ATTENTE);
     }
 
+    @Test
+    void shouldValiderCommande() {
+        Commande commande = new Commande();
+        commande.setStatutCommande(StatutCommande.EN_ATTENTE);
+        commande = commandeRepository.save(commande);
+
+        ProduitCommande pc = new ProduitCommande();
+        pc.setProduit(produit);
+        pc.setCommande(commande);
+        pc.setQuantite(2);
+        pc.setPrixUnit(100.0);
+        pc = produitCommandeRepository.save(pc);
+
+        commande.setProduitCommandes(List.of(pc));
+        commande = commandeRepository.save(commande);
+
+        String url = "/api/commandes/valider/" + commande.getId();
+        Commande response = restTemplate.patchForObject(url, null, Commande.class);
+
+        assertNotNull(response);
+        assertEquals(StatutCommande.LIVREE, response.getStatutCommande());
+    }
+
     
 }
