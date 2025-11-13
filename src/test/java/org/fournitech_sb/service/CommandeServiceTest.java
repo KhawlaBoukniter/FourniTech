@@ -118,5 +118,14 @@ class CommandeServiceTest {
         assertEquals(StatutCommande.ANNULEE, annulee.getStatutCommande());
     }
 
+    @Test
+    void annulerCommandeAlreadyLivreeThrowsTest() {
+        savedCommande.setStatutCommande(StatutCommande.LIVREE);
+        when(commandeRepository.findById(100L)).thenReturn(Optional.of(savedCommande));
+
+        Exception ex = assertThrows(IllegalStateException.class, () -> commandeService.annulerCommande(100L));
+        assertTrue(ex.getMessage().contains("Impossible d'annuler"));
+    }
+
     
 }
