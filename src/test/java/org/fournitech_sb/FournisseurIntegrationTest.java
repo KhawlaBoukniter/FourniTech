@@ -55,5 +55,22 @@ public class FournisseurIntegrationTest {
         fournisseurDto.setIce("123456789");
     }
 
+    @Test
+    void shouldCreateAndGetFournisseur() {
+        ResponseEntity<FournisseurDto> createResponse =
+                restTemplate.postForEntity("/api/fournisseurs", fournisseurDto, FournisseurDto.class);
+
+        assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        FournisseurDto created = createResponse.getBody();
+        assertThat(created).isNotNull();
+        assertThat(created.getNom()).isEqualTo(fournisseurDto.getNom());
+
+        ResponseEntity<FournisseurDto> getResponse =
+                restTemplate.getForEntity("/api/fournisseurs/" + created.getId(), FournisseurDto.class);
+
+        assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(getResponse.getBody().getNom()).isEqualTo("Fournisseur Test");
+    }
+
     
 }
