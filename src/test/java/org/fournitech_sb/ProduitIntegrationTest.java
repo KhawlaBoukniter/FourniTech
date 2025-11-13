@@ -78,5 +78,15 @@ public class ProduitIntegrationTest {
         assertThat(response.getBody()).contains("content");
     }
 
-    
+    @Test
+    void shouldDeleteProduit() {
+        ProduitDto dto = restTemplate.postForEntity("/api/produits", produitDto, ProduitDto.class).getBody();
+
+        restTemplate.delete("/api/produits/" + dto.getId());
+
+        ResponseEntity<ProduitDto> response =
+                restTemplate.getForEntity("/api/produits/" + dto.getId(), ProduitDto.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
