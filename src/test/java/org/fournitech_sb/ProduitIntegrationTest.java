@@ -37,5 +37,20 @@ public class ProduitIntegrationTest {
         registry.add("spring.datasource.driver-class-name", mysql::getDriverClassName);
     }
 
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    private ProduitDto produitDto;
+
+    @BeforeEach
+    void setUp() {
+        produitDto = new ProduitDto();
+        produitDto.setNom("Produit Test");
+        produitDto.setStockActuel(10);
+        produitDto.setPrixUnit(100.0);
+        produitDto.setDescription("Description du produit");
+        produitDto.setCategorie("Electronique");
+    }
+
     
 }
