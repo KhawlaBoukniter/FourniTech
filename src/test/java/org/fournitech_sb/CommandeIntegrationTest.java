@@ -46,5 +46,40 @@ public class CommandeIntegrationTest {
         registry.add("spring.datasource.driver-class-name", mysql::getDriverClassName);
     }
 
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Autowired
+    private FournisseurRepositoryInterface fournisseurRepository;
+
+    @Autowired
+    private ProduitRepositoryInterface produitRepository;
+
+    @Autowired
+    private CommandeRepositoryInterface commandeRepository;
+
+    @Autowired
+    private ProduitCommandeRepositoryInterface produitCommandeRepository;
+
+    private Fournisseur fournisseur;
+    private Produit produit;
+
+    @BeforeEach
+    void setUp() {
+        produitCommandeRepository.deleteAll();
+        commandeRepository.deleteAll();
+        produitRepository.deleteAll();
+        fournisseurRepository.deleteAll();
+
+        fournisseur = new Fournisseur();
+        fournisseur.setNom("Fournisseur Test");
+        fournisseur = fournisseurRepository.save(fournisseur);
+
+        produit = new Produit();
+        produit.setNom("Produit Test");
+        produit.setStockActuel(10);
+        produitRepository.save(produit);
+    }
+
     
 }
