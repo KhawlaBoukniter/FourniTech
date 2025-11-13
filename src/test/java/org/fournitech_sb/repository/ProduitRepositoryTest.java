@@ -44,5 +44,18 @@ class ProduitRepositoryTest {
         assertThat(found.get().getNom()).isEqualTo("Test");
     }
 
+    @Test
+    void deleteTest() {
+        Produit produit = new Produit();
+        produit.setNom("Test");
+        produit.setStockActuel(7);
+        produit.setPrixUnit(20.0);
+        produitRepository.save(produit);
+
+        produitRepository.deleteById(produit.getId());
+        Optional<Produit> deleted = produitRepository.findById(produit.getId());
+
+        assertThat(deleted).isNotPresent();
+    }
 
 }
