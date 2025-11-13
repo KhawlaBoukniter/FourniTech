@@ -127,5 +127,14 @@ class CommandeServiceTest {
         assertTrue(ex.getMessage().contains("Impossible d'annuler"));
     }
 
+    @Test
+    void deleteCommandeTest() {
+        savedCommande.setStatutCommande(StatutCommande.EN_ATTENTE);
+        when(commandeRepository.findById(100L)).thenReturn(Optional.of(savedCommande));
+
+        commandeService.deleteCommande(100L);
+        verify(commandeRepository, times(1)).delete(savedCommande);
+    }
+
     
 }
