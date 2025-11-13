@@ -72,5 +72,13 @@ public class FournisseurIntegrationTest {
         assertThat(getResponse.getBody().getNom()).isEqualTo("Fournisseur Test");
     }
 
-    
+    @Test
+    void shouldListFournisseurs() {
+        ResponseEntity<String> response =
+                restTemplate.getForEntity("/api/fournisseurs?page=0&size=5", String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("content");
+    }
+
 }
