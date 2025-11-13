@@ -136,5 +136,12 @@ class CommandeServiceTest {
         verify(commandeRepository, times(1)).delete(savedCommande);
     }
 
-    
+    @Test
+    void deleteCommandeAlreadyLivreeThrowsTest() {
+        savedCommande.setStatutCommande(StatutCommande.LIVREE);
+        when(commandeRepository.findById(100L)).thenReturn(Optional.of(savedCommande));
+
+        Exception ex = assertThrows(IllegalStateException.class, () -> commandeService.deleteCommande(100L));
+        assertTrue(ex.getMessage().contains("Impossible de supprimer"));
+    }
 }
