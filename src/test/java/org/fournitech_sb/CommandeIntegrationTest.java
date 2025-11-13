@@ -145,5 +145,21 @@ public class CommandeIntegrationTest {
         assertEquals(StatutCommande.ANNULEE, response.getStatutCommande());
     }
 
-    
+    @Test
+    void shouldDeleteCommande() {
+        CommandeDto dto = new CommandeDto();
+        dto.setFournisseurId(fournisseur.getId());
+        ProduitCommandeDto pc = new ProduitCommandeDto();
+        pc.setProduitId(produit.getId());
+        pc.setQuantite(1);
+        pc.setPrixUnit(5.0);
+        dto.setProduitCommandes(List.of(pc));
+
+        CommandeDto created = restTemplate.postForObject("/api/commandes", dto, CommandeDto.class);
+
+        restTemplate.delete("/api/commandes/" + created.getId());
+
+        ResponseEntity<CommandeDto> response = restTemplate.getForEntity("/api/commandes/" + created.getId(), CommandeDto.class);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
