@@ -83,5 +83,27 @@ class CommandeServiceTest {
         verify(commandeRepository, times(1)).save(entity);
     }
 
+    @Test
+    void validerCommandeTest() {
+        ProduitCommande pc = new ProduitCommande();
+        pc.setProduit(produit);
+        pc.setQuantite(2);
+        pc.setPrixUnit(10.0);
+        savedCommande.getProduitCommandes().add(pc);
+
+        when(commandeRepository.findById(100L)).thenReturn(Optional.of(savedCommande));
+        when(produitRepository.findById(produit.getId())).thenReturn(Optional.of(produit));
+        when(commandeRepository.save(savedCommande)).thenReturn(savedCommande);
+
+        CommandeDto validatedDto = new CommandeDto();
+        validatedDto.setStatutCommande(StatutCommande.LIVREE);
+        when(commandeMapper.toDto(savedCommande)).thenReturn(validatedDto);
+
+        CommandeDto validated = commandeService.validerCommande(100L);
+        assertEquals(StatutCommande.LIVREE, validated.getStatutCommande());
+        verify(mouvementStockService, times(1))
+                .createMouvement(produit, 2, 10.0, TypeMouvement.SORTIE, 100L);
+    }
+
     
 }
