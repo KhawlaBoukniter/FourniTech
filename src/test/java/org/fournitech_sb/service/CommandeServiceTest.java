@@ -69,5 +69,19 @@ class CommandeServiceTest {
         savedCommande.setStatutCommande(StatutCommande.EN_ATTENTE);
     }
 
+    @Test
+    void createCommandeTest() {
+        Commande entity = new Commande();
+        entity.setProduitCommandes(new ArrayList<>());
+        when(fournisseurRepository.findById(1L)).thenReturn(Optional.of(fournisseur));
+        when(commandeMapper.toEntity(commandeDto)).thenReturn(entity);
+        when(commandeRepository.save(entity)).thenReturn(savedCommande);
+        when(commandeMapper.toDto(savedCommande)).thenReturn(commandeDto);
+
+        CommandeDto result = commandeService.createCommande(commandeDto);
+        assertNotNull(result);
+        verify(commandeRepository, times(1)).save(entity);
+    }
+
     
 }
