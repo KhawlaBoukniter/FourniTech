@@ -38,4 +38,22 @@ public class FournisseurIntegrationTest {
         registry.add("spring.datasource.driver-class-name", mysql::getDriverClassName);
     }
 
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    private FournisseurDto fournisseurDto;
+
+    @BeforeEach
+    void setUp() {
+        fournisseurDto = new FournisseurDto();
+        fournisseurDto.setNom("Fournisseur Test");
+        fournisseurDto.setSociete("Test SA");
+        fournisseurDto.setAdresse("addresse test");
+        fournisseurDto.setEmail("test@email.com");
+        fournisseurDto.setTelephone("0612345678");
+        fournisseurDto.setVille("test");
+        fournisseurDto.setIce("123456789");
+    }
+
+    
 }
