@@ -81,5 +81,23 @@ public class CommandeIntegrationTest {
         produitRepository.save(produit);
     }
 
+    @Test
+    void shouldCreateCommande() {
+        CommandeDto dto = new CommandeDto();
+        dto.setFournisseurId(fournisseur.getId());
+
+        ProduitCommandeDto pc = new ProduitCommandeDto();
+        pc.setProduitId(produit.getId());
+        pc.setQuantite(5);
+        pc.setPrixUnit(20.0);
+        dto.setProduitCommandes(List.of(pc));
+
+        ResponseEntity<CommandeDto> response = restTemplate.postForEntity("/api/commandes", dto, CommandeDto.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getStatutCommande()).isEqualTo(StatutCommande.EN_ATTENTE);
+    }
+
     
 }
