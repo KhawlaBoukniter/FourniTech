@@ -30,5 +30,19 @@ class ProduitRepositoryTest {
         assertThat(savedProduit.getNom()).isEqualTo("Test");
     }
 
+    @Test
+    void findByIdTest() {
+        Produit produit = new Produit();
+        produit.setNom("Test");
+        produit.setStockActuel(5);
+        produit.setPrixUnit(49.9);
+        produitRepository.save(produit);
+
+        Optional<Produit> found = produitRepository.findById(produit.getId());
+
+        assertThat(found).isPresent();
+        assertThat(found.get().getNom()).isEqualTo("Test");
+    }
+
 
 }
