@@ -81,4 +81,15 @@ public class FournisseurIntegrationTest {
         assertThat(response.getBody()).contains("content");
     }
 
+    @Test
+    void shouldDeleteFournisseur() {
+        FournisseurDto dto = restTemplate.postForEntity("/api/fournisseurs", fournisseurDto, FournisseurDto.class).getBody();
+
+        restTemplate.delete("/api/fournisseurs/" + dto.getId());
+
+        ResponseEntity<FournisseurDto> response =
+                restTemplate.getForEntity("/api/fournisseurs/" + dto.getId(), FournisseurDto.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
