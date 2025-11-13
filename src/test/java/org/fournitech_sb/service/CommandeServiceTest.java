@@ -105,5 +105,18 @@ class CommandeServiceTest {
                 .createMouvement(produit, 2, 10.0, TypeMouvement.SORTIE, 100L);
     }
 
+    @Test
+    void annulerCommandeTest() {
+        when(commandeRepository.findById(100L)).thenReturn(Optional.of(savedCommande));
+        when(commandeRepository.save(savedCommande)).thenReturn(savedCommande);
+
+        CommandeDto annuleeDto = new CommandeDto();
+        annuleeDto.setStatutCommande(StatutCommande.ANNULEE);
+        when(commandeMapper.toDto(savedCommande)).thenReturn(annuleeDto);
+
+        CommandeDto annulee = commandeService.annulerCommande(100L);
+        assertEquals(StatutCommande.ANNULEE, annulee.getStatutCommande());
+    }
+
     
 }
