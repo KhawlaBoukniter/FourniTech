@@ -69,5 +69,14 @@ public class ProduitIntegrationTest {
         assertThat(getResponse.getBody().getNom()).isEqualTo("Produit Test");
     }
 
+    @Test
+    void shouldListProduits() {
+        ResponseEntity<String> response =
+                restTemplate.getForEntity("/api/produits?page=0&size=5", String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("content");
+    }
+
     
 }
