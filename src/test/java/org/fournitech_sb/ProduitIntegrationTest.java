@@ -52,5 +52,22 @@ public class ProduitIntegrationTest {
         produitDto.setCategorie("Electronique");
     }
 
+    @Test
+    void shouldCreateAndGetProduit() {
+        ResponseEntity<ProduitDto> createResponse =
+                restTemplate.postForEntity("/api/produits", produitDto, ProduitDto.class);
+
+        assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        ProduitDto created = createResponse.getBody();
+        assertThat(created).isNotNull();
+        assertThat(created.getNom()).isEqualTo(produitDto.getNom());
+
+        ResponseEntity<ProduitDto> getResponse =
+                restTemplate.getForEntity("/api/produits/" + created.getId(), ProduitDto.class);
+
+        assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(getResponse.getBody().getNom()).isEqualTo("Produit Test");
+    }
+
     
 }
