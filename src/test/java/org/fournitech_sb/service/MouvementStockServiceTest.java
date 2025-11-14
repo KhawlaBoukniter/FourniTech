@@ -53,5 +53,17 @@ class MouvementStockServiceTest {
         produit.setCump(20.0);
     }
 
+    @Test
+    void testCreateMouvement_Entree() {
+        when(produitRepository.save(any())).thenReturn(produit);
+
+        mouvementStockService.createMouvement(produit, 5, 30.0, TypeMouvement.ENTREE, null);
+
+        verify(produitRepository, times(1)).save(produit);
+        verify(mouvementStockRepository, times(1)).save(any(MouvementStock.class));
+
+        assertEquals(10, produit.getStockActuel());
+    }
+
     
 }
