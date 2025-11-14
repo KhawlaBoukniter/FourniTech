@@ -109,6 +109,17 @@ public class MouvementStockIntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).contains("content");
     }
-    
+
+    @Test
+    void shouldListMouvementsByCommande() {
+        String url = "/api/mouvements-stock/commande/" + commande.getId() + "?page=0&size=10";
+
+        ResponseEntity<String> response =
+                restTemplate.getForEntity(url, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("content");
+    }
+
 
 }
