@@ -124,5 +124,17 @@ class MouvementStockServiceTest {
         assertEquals(30.0, result);
     }
 
-    
+    @Test
+    void testGetAllMouvements() {
+        Page<MouvementStock> page =
+                new PageImpl<>(List.of(new MouvementStock()));
+
+        when(mouvementStockRepository.findAll(any(Pageable.class))).thenReturn(page);
+        when(mouvementStockMapper.toDto(any())).thenReturn(new MouvementStockDto());
+
+        Page<MouvementStockDto> result =
+                mouvementStockService.getAllMouvements(0, 5, "id", true);
+
+        assertEquals(1, result.getContent().size());
+    }
 }
