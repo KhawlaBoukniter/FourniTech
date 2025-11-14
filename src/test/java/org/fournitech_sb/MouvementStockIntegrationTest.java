@@ -121,5 +121,13 @@ public class MouvementStockIntegrationTest {
         assertThat(response.getBody()).contains("content");
     }
 
+    @Test
+    void shouldListMouvementsByType() {
+        ResponseEntity<String> response =
+                restTemplate.getForEntity("/api/mouvements-stock/type/SORTIE?page=0&size=10", String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("content");
+    }
 
 }
