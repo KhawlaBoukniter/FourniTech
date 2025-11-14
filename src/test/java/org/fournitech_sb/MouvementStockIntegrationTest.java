@@ -44,6 +44,52 @@ public class MouvementStockIntegrationTest {
         registry.add("spring.datasource.driver-class-name", mysql::getDriverClassName);
     }
 
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Autowired
+    private ProduitRepositoryInterface produitRepository;
+
+    @Autowired
+    private CommandeRepositoryInterface commandeRepository;
+
+    @Autowired
+    private MouvementStockRepositoryInterface mouvementStockRepository;
+
+    private Produit produit;
+    private Commande commande;
+
+    @BeforeEach
+    void setup() {
+        mouvementStockRepository.deleteAll();
+        commandeRepository.deleteAll();
+        produitRepository.deleteAll();
+
+        produit = new Produit();
+        produit.setNom("Produit Test");
+        produit.setStockActuel(50);
+        produitRepository.save(produit);
+
+        commande = new Commande();
+        commande.setStatutCommande(StatutCommande.EN_ATTENTE);
+        commandeRepository.save(commande);
+
+        MouvementStock m1 = new MouvementStock();
+        m1.setProduit(produit);
+        m1.setQuantiteMouvement(10);
+        m1.setTypeMouvement(TypeMouvement.ENTREE);
+        m1.setDateMouvement(LocalDate.now());
+        mouvementStockRepository.save(m1);
+
+        MouvementStock m2 = new MouvementStock();
+        m2.setProduit(produit);
+        m2.setCommande(commande);
+        m2.setQuantiteMouvement(5);
+        m2.setTypeMouvement(TypeMouvement.SORTIE);
+        m2.setDateMouvement(LocalDate.now());
+        mouvementStockRepository.save(m2);
+    }
+
     
 
 }
