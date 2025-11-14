@@ -75,5 +75,14 @@ class MouvementStockServiceTest {
         assertEquals(6, produit.getStockActuel());
     }
 
+    @Test
+    void testCreateMouvement_SortieStockInsuffisant() {
+        produit.setStockActuel(2);
+
+        assertThrows(IllegalStateException.class,
+                () -> mouvementStockService.createMouvement(produit, 5, null, TypeMouvement.SORTIE, null)
+        );
+    }
+
     
 }
