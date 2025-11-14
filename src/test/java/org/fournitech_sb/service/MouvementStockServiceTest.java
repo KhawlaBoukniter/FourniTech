@@ -65,5 +65,15 @@ class MouvementStockServiceTest {
         assertEquals(10, produit.getStockActuel());
     }
 
+    @Test
+    void testCreateMouvement_Sortie() {
+        when(produitRepository.save(any())).thenReturn(produit);
+
+        mouvementStockService.createMouvement(produit, 4, null, TypeMouvement.SORTIE, null);
+
+        verify(produitRepository, times(1)).save(produit);
+        assertEquals(6, produit.getStockActuel());
+    }
+
     
 }
