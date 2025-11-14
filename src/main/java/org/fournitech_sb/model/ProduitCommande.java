@@ -1,5 +1,6 @@
 package org.fournitech_sb.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -22,7 +23,7 @@ public class ProduitCommande {
 
     @ManyToOne
     @JoinColumn(name = "commande_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Commande commande;
 
     private Integer quantite;

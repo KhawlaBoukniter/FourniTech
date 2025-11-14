@@ -83,36 +83,36 @@ public class FournisseurController {
         }
     }
 
-    @GetMapping("/byName")
-    @Operation(summary = "Rechercher des fournisseurs par nom", description = "Retourne les fournisseurs dont le nom correspond à la recherche")
-    public ResponseEntity<Page<FournisseurDto>> findFournisseurByNom(
-            @RequestParam("nom") String nom,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "true") Boolean ascending) {
-        Page<FournisseurDto> fournisseurs = fournisseurService.findFournisseurByNom(nom, page, size, sortBy, ascending)
-                .map(fournisseurMapper::toDto);
-        return ResponseEntity.ok(fournisseurs);
-    }
-
-    @GetMapping("/byEmailEndingWith")
-    @Operation(summary = "Rechercher des fournisseurs par fin d'email", description = "Retourne les fournisseurs dont l'email se termine par la chaîne fournie")
-    public ResponseEntity<Page<FournisseurDto>> findByEmailEndingWith(
-            @RequestParam("ending") String ending,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "true") Boolean ascending) {
-        Page<FournisseurDto> fournisseurs = fournisseurService.findFournisseurByNomEndingWith(ending, page, size, sortBy, ascending)
-                .map(fournisseurMapper::toDto);
-        return ResponseEntity.ok(fournisseurs);
-    }
-
-    @GetMapping("/count")
-    @Operation(summary = "Compter les fournisseurs", description = "Retourne le nombre total de fournisseurs")
-    public ResponseEntity<Long> countFournisseurs() {
-        Long count = fournisseurService.countFournisseurs();
-        return ResponseEntity.ok(count);
-    }
+//    @GetMapping("/byName")
+//    @Operation(summary = "Rechercher des fournisseurs par nom", description = "Retourne les fournisseurs dont le nom correspond à la recherche")
+//    public ResponseEntity<Page<FournisseurDto>> findFournisseurByNom(
+//            @RequestParam("nom") String nom,
+//            @RequestParam(defaultValue = "0") Integer page,
+//            @RequestParam(defaultValue = "5") Integer size,
+//            @RequestParam(defaultValue = "id") String sortBy,
+//            @RequestParam(defaultValue = "true") Boolean ascending) {
+//        Page<FournisseurDto> fournisseurs = fournisseurService.findFournisseurByNom(nom, page, size, sortBy, ascending)
+//                .map(fournisseurMapper::toDto);
+//        return ResponseEntity.ok(fournisseurs);
+//    }
+//
+//    @GetMapping("/byEmailEndingWith")
+//    @Operation(summary = "Rechercher des fournisseurs par fin d'email", description = "Retourne les fournisseurs dont l'email se termine par la chaîne fournie")
+//    public ResponseEntity<Page<FournisseurDto>> findByEmailEndingWith(
+//            @RequestParam("ending") String ending,
+//            @RequestParam(defaultValue = "0") Integer page,
+//            @RequestParam(defaultValue = "5") Integer size,
+//            @RequestParam(defaultValue = "id") String sortBy,
+//            @RequestParam(defaultValue = "true") Boolean ascending) {
+//        Page<FournisseurDto> fournisseurs = fournisseurService.findFournisseurByNomEndingWith(ending, page, size, sortBy, ascending)
+//                .map(fournisseurMapper::toDto);
+//        return ResponseEntity.ok(fournisseurs);
+//    }
+//
+//    @GetMapping("/count")
+//    @Operation(summary = "Compter les fournisseurs", description = "Retourne le nombre total de fournisseurs")
+//    public ResponseEntity<Long> countFournisseurs() {
+//        Long count = fournisseurService.countFournisseurs();
+//        return ResponseEntity.ok(count);
+//    }
 }

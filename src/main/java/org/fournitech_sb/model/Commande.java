@@ -1,6 +1,7 @@
 package org.fournitech_sb.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -27,7 +28,7 @@ public class Commande {
     private Fournisseur fournisseur;
 
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonManagedReference
     private List<ProduitCommande> produitCommandes;
 
     private Double prix;

@@ -174,6 +174,33 @@ Migrations gérées via **Liquibase** avec `db.changelog/app-changelog.xml`.
 
 ---
 
+## Tests
+
+Le projet inclut **des tests unitaires et d’intégration** couvrant les services et les endpoints REST.
+
+### Tests Unitaires
+
+* **ProduitServiceTest** : création, mise à jour, suppression et recherche de produits.
+* **MouvementStockServiceTest** : création de mouvements (ENTREE, SORTIE, AJUSTEMENT), calcul du CUMP, vérification des exceptions.
+* **FournisseurServiceTest** : création, mise à jour, recherche, suppression.
+* **CommandeServiceTest** : création, validation, annulation et suppression des commandes, vérification des exceptions.
+
+### Tests d’Intégration
+
+* **ProduitIntegrationTest** : test de création, récupération, listing et suppression via l’API.
+* **MouvementStockIntegrationTest** : test de listing global et filtré par produit, commande et type.
+* **CommandeIntegrationTest** : création, validation, annulation et suppression de commandes via l’API.
+
+Tous les tests utilisent **Testcontainers** pour lancer une base MySQL isolée.
+
+Commandes pour exécuter les tests :
+
+```bash
+mvn test jacoco:report
+```
+
+---
+
 ## Contributions
 
 Les contributions sont les bienvenues !
