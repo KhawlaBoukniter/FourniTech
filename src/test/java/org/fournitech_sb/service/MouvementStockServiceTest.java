@@ -108,5 +108,14 @@ class MouvementStockServiceTest {
         verify(mouvementStockRepository).save(any());
     }
 
+    @Test
+    void testCreateMouvement_CommandeNotFound() {
+        when(commandeRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () ->
+                mouvementStockService.createMouvement(produit, 3, null, TypeMouvement.ENTREE, 99L)
+        );
+    }
+
     
 }
