@@ -84,5 +84,15 @@ class MouvementStockServiceTest {
         );
     }
 
+    @Test
+    void testCreateMouvement_Ajustement() {
+        when(produitRepository.save(any())).thenReturn(produit);
+
+        mouvementStockService.createMouvement(produit, 0, null, TypeMouvement.AJUSTEMENT, null);
+
+        verify(produitRepository).save(produit);
+        assertEquals(10, produit.getStockActuel());
+    }
+
     
 }
