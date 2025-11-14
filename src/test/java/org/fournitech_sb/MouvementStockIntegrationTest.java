@@ -98,6 +98,17 @@ public class MouvementStockIntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).contains("content");
     }
+
+    @Test
+    void shouldListMouvementsByProduit() {
+        String url = "/api/mouvements-stock/produit/" + produit.getId() + "?page=0&size=10";
+
+        ResponseEntity<String> response =
+                restTemplate.getForEntity(url, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("content");
+    }
     
 
 }
