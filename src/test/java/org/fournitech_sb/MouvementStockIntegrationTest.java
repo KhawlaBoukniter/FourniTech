@@ -90,6 +90,14 @@ public class MouvementStockIntegrationTest {
         mouvementStockRepository.save(m2);
     }
 
+    @Test
+    void shouldListMouvementsStock() {
+        ResponseEntity<String> response =
+                restTemplate.getForEntity("/api/mouvements-stock?page=0&size=10", String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("content");
+    }
     
 
 }
