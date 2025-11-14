@@ -94,5 +94,19 @@ class MouvementStockServiceTest {
         assertEquals(10, produit.getStockActuel());
     }
 
+    @Test
+    void testCreateMouvement_AvecCommande() {
+        Commande commande = new Commande();
+        commande.setId(1L);
+
+        when(commandeRepository.findById(1L)).thenReturn(Optional.of(commande));
+        when(produitRepository.save(any())).thenReturn(produit);
+
+        mouvementStockService.createMouvement(produit, 3, null, TypeMouvement.ENTREE, 1L);
+
+        verify(commandeRepository).findById(1L);
+        verify(mouvementStockRepository).save(any());
+    }
+
     
 }
