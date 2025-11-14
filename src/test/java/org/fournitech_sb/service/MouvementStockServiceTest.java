@@ -117,5 +117,12 @@ class MouvementStockServiceTest {
         );
     }
 
+    @Test
+    void testCalculerCUMP() {
+        Double result = mouvementStockService.calculerPrixUnitaireCUMP(produit, 10, 40.0);
+
+        assertEquals(30.0, result);
+    }
+
     
 }
